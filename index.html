@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🛒 我真需要它吗？消费决策助手（健康增强版）</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #3498db;
+      --success: #27ae60;
+      --warn: #f39c12;
+      --danger: #e74c3c;
+      --light: #f8f9fa;
+      --border: #dee2e6;
+      --gray: #6c757d;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      background-color: var(--light);
+      color: #333;
+      line-height: 1.6;
+      padding: 15px;
+      max-width: 900px;
+      margin: auto;
+      font-size: 15px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .intro {
+      font-size: 14px;
+      color: var(--gray);
+      text-align: center;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 15px;
+    }
+
+    /* 紧凑型下拉框 */
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 15px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background-color: #fff;
+      color: #555;
+      cursor: pointer;
+    }
+
+    option {
+      font-size: 15px;
+      padding: 6px 0;
+      color: #333;
+    }
+
+    small {
+      display: block;
+      margin-top: 6px;
+      color: #777;
+      font-size: 13.5px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: var(--success);
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 25px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    /* 结果区域 */
+    .result {
+      margin-top: 30px;
+      padding: 25px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: none;
+      border-left: 5px solid var(--accent);
+    }
+
+    .result h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 20px;
+    }
+
+    .score {
+      font-size: 30px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .stars {
+      color: var(--warn);
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .advice {
+      font-size: 17px;
+      margin: 12px 0;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .tip-list {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      font-size: 14.5px;
+    }
+
+    .tip-list li {
+      margin: 6px 0;
+      color: var(--gray);
+    }
+
+    .highlight {
+      color: #d35400;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body { font-size: 14.5px; }
+      h1 { font-size: 22px; }
+      .form-group { padding: 12px; }
+      select, input, button { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛒 我真需要它吗？—— 健康优先版</h1>
+  <p class="intro">
+    新增「健康与安全」高权重评估。8项评分，满分40分。<br>
+    选择前请诚实面对自己，结果才真实有效。
+  </p>
+
+  <!-- 商品名称 -->
+  <div class="form-group">
+    <label for="product">你想购买的商品是？</label>
+    <input type="text" id="product" placeholder="例如：护腰坐垫、空气净化器、运动鞋" />
+  </div>
+
+  <!-- C - 清晰度 -->
+  <div class="form-group">
+    <label for="clarity">C — 你有多清楚自己要什么？</label>
+    <select id="clarity">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">完全没想清楚，只是“感觉想要”</option>
+      <option value="2">知道品类，但不了解功能差异</option>
+      <option value="3">了解基本参数，不确定是否适合我</option>
+      <option value="4">已对比多个型号，有候选清单</option>
+      <option value="5">非常明确：品牌+型号+核心需求都确定</option>
+    </select>
+    <small>💡 越具体得分越高（如“小米净水器 H1000G”）</small>
+  </div>
+
+  <!-- R - 真实需求 vs 想要 -->
+  <div class="form-group">
+    <label for="need">R — 这是真实需求还是情绪欲望？</label>
+    <select id="need">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">纯情绪消费：解压、跟风、收藏、炫耀</option>
+      <option value="2">提升乐趣，但无实际功能作用</option>
+      <option value="3">现有物品可用，但体验较差</option>
+      <option value="4">旧物已损坏/严重影响效率或健康</option>
+      <option value="5">生活刚需（如手机坏了、冬天无外套）</option>
+    </select>
+    <small>💡 自问：“没有它，我的正常生活会受影响吗？”</small>
+  </div>
+
+  <!-- E - 替代方案 -->
+  <div class="form-group">
+    <label for="alternatives">E — 是否有可用替代品？</label>
+    <select id="alternatives">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">已有同类好用物品，再买就是重复</option>
+      <option value="2">有替代品，勉强能用但不方便</option>
+      <option value="3">当前方案过时或效率低下</option>
+      <option value="4">临时借用/租用，不稳定</option>
+      <option value="5">完全没有可用替代品</option>
+    </select>
+  </div>
+
+  <!-- D - 使用频率 -->
+  <div class="form-group">
+    <label for="frequency">D — 你会多频繁使用它？</label>
+    <select id="frequency">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">极低频（一年几次或一次性）</option>
+      <option value="2">每月1–2次</option>
+      <option value="3">每周1–3次</option>
+      <option value="4">几乎每天使用</option>
+      <option value="5">高频使用，预计使用超1年</option>
+    </select>
+  </div>
+
+  <!-- I - 健康与安全影响（新增高权重项）-->
+  <div class="form-group">
+    <label for="health">I — 是否有益于健康或安全？</label>
+    <select id="health">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">无关甚至有害（如高糖零食、熬夜设备）</option>
+      <option value="2">中性影响，无直接健康作用</option>
+      <option value="3">轻微促进健康（如提醒喝水的杯子）</option>
+      <option value="4">明显改善身体状态（如护腰椅、降噪耳机助眠）</option>
+      <option value="5">关键防护或治疗辅助（如血压计、防过敏床品）</option>
+    </select>
+    <small>💡 健康相关商品建议提高评估优先级</small>
+  </div>
+
+  <!-- N - 效率与生活质量 -->
+  <div class="form-group">
+    <label for="quality">N — 是否提升效率或生活质量？</label>
+    <select id="quality">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">无提升，可能增加维护负担</option>
+      <option value="2">带来短暂愉悦感</option>
+      <option value="3">轻微提升便利性或舒适度</option>
+      <option value="4">显著节省时间或精力</option>
+      <option value="5">极大优化工作流或家庭生活</option>
+    </select>
+  </div>
+
+  <!-- T - 紧迫性 -->
+  <div class="form-group">
+    <label for="timing">T — 购买时机是否紧急？</label>
+    <select id="timing">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">完全不急，只是为了“不错过促销”</option>
+      <option value="2">未来几周内可能会用到</option>
+      <option value="3">近期需要，但可替代</option>
+      <option value="4">延迟会影响计划（如下周旅行）</option>
+      <option value="5">立即需要（设备坏/天气变）</option>
+    </select>
+  </div>
+
+  <!-- B - 财务考量 -->
+  <div class="form-group">
+    <label for="budget">B — 购买对财务的影响？</label>
+    <select id="budget">
+      <option value="" selected disabled>请选择...</option>
+      <option value="1">严重超预算，需借贷或影响必要开支</option>
+      <option value="2">超出日常预算，需压缩其他支出</option>
+      <option value="3">在预算内，但属于大额支出</option>
+      <option value="4">价格合理，属计划内消费</option>
+      <option value="5">性价比高，甚至比预期便宜</option>
+    </select>
+    <small>💡 单笔消费建议不超过月收入10%</small>
+  </div>
+
+  <button onclick="calculate()">📊 开始评估我的购物需求</button>
+
+  <div class="result" id="result">
+    <h2>🔍 评估结果</h2>
+    <p><strong>商品：</strong> <span id="resultProduct"></span></p>
+    <p><strong>总分：</strong> <span class="score" id="totalScore">0</span> / 40</p>
+    <p class="stars" id="stars"></p>
+    <p class="advice" id="advice"></p>
+    <ul class="tip-list" id="tipList"></ul>
+  </div>
+
+  <footer>
+    &copy; 2025 消费理性助手 | 关注健康，理性消费
+  </footer>
+
+  <script>
+    function calculate() {
+      const product = document.getElementById("product").value || "未知商品";
+
+      // 获取所有值并验证是否选择
+      const getVal = id => {
+        const val = document.getElementById(id).value;
+        return val === "" || val === "null" ? 3 : +val; // 默认3分防止NaN
+      };
+
+      const clarity     = getVal("clarity");
+      const need        = getVal("need");
+      const alternatives= getVal("alternatives");
+      const frequency   = getVal("frequency");
+      const health      = getVal("health");     // 新增健康维度
+      const quality     = getVal("quality");    // 原效率维度
+      const timing      = getVal("timing");
+      const budget      = getVal("budget");
+
+      const total = clarity + need + alternatives + frequency + health + quality + timing + budget;
+
+      // 显示结果
+      document.getElementById("resultProduct").textContent = product;
+      document.getElementById("totalScore").textContent = total;
+
+      // 星星（1~5颗）
+      const starsCount = Math.max(1, Math.min(5, Math.ceil(total / 8)));
+      document.getElementById("stars").textContent = "⭐".repeat(starsCount);
+
+      // === 动态建议（更具操作性）===
+      let advice = "";
+      let tips = [];
+
+      if (total >= 35) {
+        advice = "✅ 高价值需求，尤其利于健康或安全，建议尽快满足。";
+        tips.push("📌 可现在下单，或等待更好价格（如大促）");
+        if (budget <= 3) tips.push("💸 提醒：即使必要，也建议分阶段支付避免压力");
+      } else if (total >= 28) {
+        advice = "🟡 存在合理需求，但建议执行“冷静观察期”。";
+        tips.push("⏳ 行动建议：设置 <strong>24–72小时冷静期</strong>");
+        if (health <= 2 && need <= 2) {
+          tips.push("🧠 心理提醒：你可能是在用消费填补情绪空缺");
+        }
+        if (alternatives <= 2) {
+          tips.push("🔄 提醒：你已有类似物品，新购可能闲置");
+        }
+      } else if (total >= 20) {
+        advice = "⚠️ 很可能是非必要消费，建议主动暂停购买决策。";
+        tips.push("🛑 强烈建议：不要现在下单！");
+        tips.push("📝 写下三个‘我为什么想要它’的原因，判断真实性");
+        if (health <= 1) {
+          tips.push("🚨 警告：<strong>该商品可能对健康无益甚至有害</strong>，请三思");
+        }
+      } else {
+        advice = "❌ 极大概率是伪需求，强烈建议放弃此次购买。";
+        tips.push("🚫 行动建议：关闭页面，删除购物车");
+        tips.push("🧠 自问：如果明天不能退货，我还愿意买吗？");
+        tips.push("📉 数据支持：此类消费90%会在3个月内后悔");
+        if (budget <= 2) {
+          tips.push("💸 财务风险高，可能引发后续经济压力");
+        }
+      }
+
+      document.getElementById("advice").innerHTML = advice;
+      const tipList = document.getElementById("tipList");
+      tipList.innerHTML = "";
+      tips.forEach(tip => {
+        const li = document.createElement("li");
+        li.innerHTML = tip;
+        tipList.appendChild(li);
+      });
+
+      document.getElementById("result").style.display = "block";
+    }
+
+    // 回车触发
+    document.addEventListener('keypress', e => {
+      if (e.key === 'Enter') calculate();
+    });
+  </script>
+
+</body>
+</html>
