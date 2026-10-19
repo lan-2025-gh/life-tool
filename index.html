@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>债券型-长债基金分析报告</title>
+<style>
+  :root {
+    --orange-500: #FD5108;
+    --orange-400: #FE7C39;
+    --orange-300: #FFAA72;
+    --orange-200: #FFCDA8;
+    --orange-100: #FFE8D4;
+    --orange-50: #FFF5ED;
+    --grey-500: #A1A8B3;
+    --grey-400: #B5BCC4;
+    --grey-300: #CBD1D6;
+    --grey-200: #DFE3E6;
+    --grey-100: #EEEFF1;
+    --grey-50: #F5F7F8;
+    --ink: #1A1A1A;
+    --ink-strong: #000000;
+    --bg: #FFFFFF;
+    --brand-white: #FFFFFF;
+    --brand-black: #000000;
+    --green: #059669;
+    --yellow: #E9B01F;
+    --red: #DC2626;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 32px;
+    --spacing-4xl: 48px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--grey-50);
+    color: #333333;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .container { max-width: 1240px; margin: 0 auto; padding: var(--spacing-4xl) var(--spacing-2xl); }
+
+  header.hero {
+    background: var(--brand-black);
+    color: var(--brand-white);
+    padding: var(--spacing-4xl) var(--spacing-3xl);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-4xl);
+  }
+  header.hero h1 {
+    font-family: Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    font-size: clamp(24px, 5vw, 44px);
+    color: var(--brand-white);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.2;
+  }
+  header.hero p { color: var(--grey-300); font-size: 14px; max-width: 720px; }
+  .hero-meta { display: flex; gap: var(--spacing-3xl); flex-wrap: wrap; margin-top: var(--spacing-3xl); }
+  .hero-meta .item .label { font-size: 11px; font-weight: 700; color: var(--grey-400); text-transform: uppercase; letter-spacing: 0.05em; }
+  .hero-meta .item .value { font-size: 22px; font-weight: 700; color: var(--orange-400); letter-spacing: -0.04em; }
+
+  h2 {
+    font-family: Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    font-size: clamp(22px, 4vw, 28px);
+    color: var(--ink-strong);
+    margin-bottom: var(--spacing-3xl);
+    padding-top: var(--spacing-xl);
+    line-height: 1.25;
+  }
+  h2::before {
+    content: "";
+    display: block;
+    width: 74px;
+    height: 10px;
+    background: var(--orange-500);
+    margin-bottom: var(--spacing-lg);
+  }
+  h3 { font-family: Arial, sans-serif; font-weight: 700; font-size: 18px; color: var(--ink-strong); margin-bottom: var(--spacing-xl); }
+
+  section { margin-bottom: var(--spacing-4xl); }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--spacing-lg); }
+  .kpi-card {
+    background: var(--bg);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-sm);
+  }
+  .kpi-card .label { font-size: 12px; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: var(--spacing-md); }
+  .kpi-card .num { font-size: clamp(26px, 6vw, 34px); font-weight: 700; color: var(--orange-500); letter-spacing: -0.06em; }
+  .kpi-card .sub { font-size: 12px; color: var(--grey-500); margin-top: var(--spacing-xs); }
+
+  .chart-card {
+    background: var(--bg);
+    border: 1px solid var(--grey-200);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-3xl);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-2xl);
+  }
+  .chart-card h3 { margin-bottom: var(--spacing-2xl); }
+
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 720px; }
+  thead th { background: var(--grey-50); text-align: left; padding: var(--spacing-md) var(--spacing-lg); font-size: 12px; font-weight: 700; color: var(--grey-500); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--grey-200); white-space: nowrap; }
+  tbody td { padding: var(--spacing-md) var(--spacing-lg); border-bottom: 1px solid var(--grey-100); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--orange-50); }
+  .rank-cell { font-weight: 700; color: var(--orange-500); font-size: 16px; }
+  .num-cell { font-weight: 700; color: var(--orange-500); }
+  .pos { color: var(--green); font-weight: 700; }
+  .neg { color: var(--red); font-weight: 700; }
+  .fund-name { font-weight: 700; color: var(--ink-strong); }
+  .fund-code { font-size: 12px; color: var(--grey-500); }
+
+  .insight-panel {
+    background: var(--orange-50);
+    border: 1px solid var(--orange-200);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-3xl);
+  }
+  .insight-panel h3 { color: var(--ink-strong); }
+  .insight-panel p { font-size: 15px; color: #444; margin-bottom: var(--spacing-md); }
+  .insight-panel .highlight { font-weight: 700; color: var(--orange-500); }
+
+  .closing-panel {
+    background: var(--brand-black);
+    color: var(--brand-white);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-4xl) var(--spacing-3xl);
+    text-align: center;
+  }
+  .closing-panel p { color: var(--grey-300); font-size: 14px; }
+
+  footer { text-align: center; color: var(--grey-500); font-size: 12px; padding: var(--spacing-3xl) 0; }
+
+  .loading { text-align: center; padding: var(--spacing-4xl); color: var(--grey-500); }
+  .error { text-align: center; padding: var(--spacing-4xl); color: var(--red); }
+
+  @media (max-width: 640px) {
+    .container { padding: var(--spacing-2xl) var(--spacing-lg); }
+    header.hero { padding: var(--spacing-3xl) var(--spacing-xl); }
+    .hero-meta { gap: var(--spacing-xl); }
+    .hero-meta .item { flex: 1 1 40%; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; gap: var(--spacing-md); }
+    .kpi-card { padding: var(--spacing-lg); }
+    .chart-card { padding: var(--spacing-xl); }
+    .insight-panel { padding: var(--spacing-xl); }
+    .closing-panel { padding: var(--spacing-3xl) var(--spacing-xl); }
+  }
+  @media (max-width: 380px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <div class="loading">正在加载数据...</div>
+</div>
+
+<script>
+function pct(v, digits = 2) {
+  if (v === null || v === undefined) return "—";
+  return (v * 100).toFixed(digits) + "%";
+}
+function num(v, digits = 2) {
+  if (v === null || v === undefined) return "—";
+  return Number(v).toFixed(digits);
+}
+
+fetch("data.json")
+  .then(res => {
+    if (!res.ok) throw new Error("无法加载 data.json");
+    return res.json();
+  })
+  .then(data => render(data))
+  .catch(err => {
+    document.getElementById("app").innerHTML =
+      '<div class="error">数据加载失败：' + err.message + '<br>请确认 data.json 与 index.html 在同一目录。</div>';
+  });
+
+function render(data) {
+  const meta = data.meta;
+  const ov = data.overview;
+  const funds = data.top_funds;
+
+  let html = "";
+
+  // Hero
+  html += `
+  <header class="hero">
+    <h1>${meta.category} 基金分析报告</h1>
+    <p>基于历史统计特征的收益与风险画像，以及综合指标排名前 ${funds.length} 的基金。所有结论基于历史数据，不构成未来收益承诺。</p>
+    <div class="hero-meta">
+      <div class="item"><div class="label">目标类别</div><div class="value">${meta.category}</div></div>
+      <div class="item"><div class="label">有效样本</div><div class="value">${meta.sample_size} 只</div></div>
+      <div class="item"><div class="label">时间窗口</div><div class="value">${meta.window}</div></div>
+      <div class="item"><div class="label">更新日期</div><div class="value">${meta.update_date.split(" ")[0]}</div></div>
+    </div>
+  </header>`;
+
+  // 第一部分：总体画像
+  html += `
+  <section>
+    <h2>第一部分：总体收益与风险画像</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="label">年化收益中位数 (3Y)</div>
+        <div class="num">${pct(ov.annual_return_median)}</div>
+        <div class="sub">25%分位 ${pct(ov.annual_return_q25)} / 75%分位 ${pct(ov.annual_return_q75)}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">波动率中位数 (3Y)</div>
+        <div class="num">${pct(ov.volatility_median)}</div>
+        <div class="sub">年度波动水平</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">夏普比率中位数 (3Y)</div>
+        <div class="num">${num(ov.sharpe_median)}</div>
+        <div class="sub">风险调整后收益</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">月度胜率中位数 (3Y)</div>
+        <div class="num">${pct(ov.win_rate_median, 1)}</div>
+        <div class="sub">正收益月份占比</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">最大回撤中位数 (3Y)</div>
+        <div class="num">${pct(ov.max_drawdown_median)}</div>
+        <div class="sub">历史最大跌幅</div>
+      </div>
+    </div>
+  </section>`;
+
+  // 第二部分：Top 20
+  html += `
+  <section>
+    <h2>第二部分：综合排名 Top ${funds.length}</h2>
+    <div class="insight-panel" style="margin-bottom:24px;">
+      <h3>排名方法</h3>
+      <p>${meta.rank_method}。参与指标：年化收益、夏普比率、最大回撤、月度胜率、波动率（均为 3Y 窗口）。</p>
+    </div>
+    <div class="chart-card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>排名</th>
+              <th>基金名称</th>
+              <th>年化收益</th>
+              <th>夏普比率</th>
+              <th>最大回撤</th>
+              <th>月度胜率</th>
+              <th>波动率</th>
+              <th>综合得分</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+  funds.forEach(f => {
+    const retClass = f.annual_return_3y >= 0 ? "pos" : "neg";
+    html += `
+            <tr>
+              <td class="rank-cell">${f.rank}</td>
+              <td>
+                <div class="fund-name">${f.fund_name}</div>
+                <div class="fund-code">${f.fund_id} · ${f.fund_company}</div>
+              </td>
+              <td class="num-cell ${retClass}">${pct(f.annual_return_3y)}</td>
+              <td class="num-cell">${num(f.sharpe_ratio_3y)}</td>
+              <td class="num-cell neg">${pct(f.max_drawdown_3y)}</td>
+              <td class="num-cell">${pct(f.monthly_win_rate_3y, 1)}</td>
+              <td class="num-cell">${pct(f.volatility_3y)}</td>
+              <td class="num-cell">${num(f.composite_score)}</td>
+            </tr>`;
+  });
+
+  html += `
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>`;
+
+  // 结语
+  html += `
+  <section>
+    <div class="closing-panel">
+      <p>所有结论基于历史统计特征，不构成未来收益承诺</p>
+    </div>
+  </section>
+  <footer>
+    ${meta.category} 基金分析报告 · 有效样本 ${meta.sample_size} 只 · 数据仅供研究参考
+  </footer>`;
+
+  document.getElementById("app").innerHTML = html;
+}
+</script>
+</body>
+</html>
